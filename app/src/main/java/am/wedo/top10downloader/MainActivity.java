@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         btnParse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 30-May-16 add parse activation code 
+                // TODO: 30-May-16 add parse activation code
             }
         });
 
