@@ -16,6 +16,7 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String mFileContents;
     private Button btnParse;
     private ListView listApps;
 
@@ -28,7 +29,10 @@ public class MainActivity extends AppCompatActivity {
         btnParse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 30-May-16 add parse activation code
+                if (mFileContents != null) {
+                    ParseApplications parseApplications = new ParseApplications(mFileContents);
+                    parseApplications.process();
+                }
             }
         });
 
@@ -36,15 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
         // call AsyncTask
         DownloadData downloadData = new DownloadData();
-        downloadData.execute("http://a000x.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=25/xml");
+        downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=25/xml");
     }
 
     private class DownloadData extends AsyncTask<String, Void, String> {
 
         private final String TAG = DownloadData.class.getSimpleName();
-//        private final String TAG = "test";
 
-        private String mFileContents;
 
         @Override
         protected String doInBackground(String... params) {
