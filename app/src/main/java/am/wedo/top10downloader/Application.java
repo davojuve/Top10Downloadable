@@ -3,7 +3,7 @@ package am.wedo.top10downloader;
 /**
  * Created by Davit: class for each application.
  */
-public class Applicaton {
+public class Application {
 
     private String name;
     private String srtist;
