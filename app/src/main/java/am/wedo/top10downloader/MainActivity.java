@@ -4,6 +4,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,11 +16,23 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Button btnParse;
+    private ListView listApps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        btnParse = (Button) findViewById(R.id.btnParse);
+        btnParse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 30-May-16 add parse activation code 
+            }
+        });
+
+        listApps = (ListView) findViewById(R.id.xmlListView);
 
         // call AsyncTask
         DownloadData downloadData = new DownloadData();
