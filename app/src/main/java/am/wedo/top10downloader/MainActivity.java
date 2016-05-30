@@ -18,11 +18,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // call AsyncTask
+        DownloadData downloadData = new DownloadData();
+        downloadData.execute("http://a000x.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=25/xml");
     }
 
-    private class DownloadData extends AsyncTask<String, Void, String>{
+    private class DownloadData extends AsyncTask<String, Void, String> {
 
         private final String TAG = DownloadData.class.getSimpleName();
+//        private final String TAG = "test";
 
         private String mFileContents;
 
@@ -30,17 +35,23 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             mFileContents = downloadXMLFile(params[0]);
 
-            if( null == mFileContents ){
+            if (null == mFileContents) {
                 Log.d(TAG, "Error downloading");
             }
 
             return mFileContents;
         }
 
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.d(TAG, "Result was: " + result);
+        }
+
         private String downloadXMLFile(String urlPath) {
             StringBuilder tempBuffer = new StringBuilder();
 
-            try{
+            try {
                 URL url = new URL(urlPath);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 int responseCode = connection.getResponseCode();
@@ -51,18 +62,21 @@ public class MainActivity extends AppCompatActivity {
 
                 int charRead;
                 char[] inputBuffer = new char[500]; // 500 bites at a time
-                while (true){
+                while (true) {
                     charRead = isr.read(inputBuffer); // number of characters read
-                    if(charRead <= 0){
+                    if (charRead <= 0) {
                         break;
                     }
-                    tempBuffer.append( String.copyValueOf(inputBuffer, 0, charRead) );
+                    tempBuffer.append(String.copyValueOf(inputBuffer, 0, charRead));
                 }
 
                 return tempBuffer.toString();
 
-            }catch (IOException e){
+            } catch (IOException e) {
                 Log.e(TAG, "Error downloading data: " + e.getMessage());
+//                e.printStackTrace();
+            } catch (SecurityException e){
+                Log.e(TAG, "Security Exception. Needs permissions: " + e.getMessage());
             }
 
             return null;
