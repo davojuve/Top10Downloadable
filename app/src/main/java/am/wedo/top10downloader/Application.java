@@ -6,18 +6,30 @@ package am.wedo.top10downloader;
 public class Application {
 
     private String name;
-    private String srtist;
-    private String date;
+    private String artist;
+    private String releaseDate;
 
     public String getName() {
         return name;
     }
 
-    public String getSrtist() {
-        return srtist;
+    public String getArtist() {
+        return artist;
     }
 
-    public String getDate() {
-        return date;
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }

@@ -17,22 +17,22 @@ public class ParseApplications {
     private final String TAG = ParseApplications.class.getSimpleName();
 
     private String xmlData;
-    private List<Applicaton> applicatons;
+    private List<Application> applications;
+
+    public List<Application> getApplications() {
+        return applications;
+    }
 
     public ParseApplications(String xmlData) {
         this.xmlData = xmlData;
-        applicatons = new ArrayList<>();
+        applications = new ArrayList<>();
 
     }
 
-    // getter for applications
-    public List<Applicaton> getApplicatons() {
-        return applicatons;
-    }
 
     public boolean process() {
         boolean status = true;
-        Applicaton currentRecord;
+        Application currentRecord = null;
         boolean inEntry = false;
         String textValue = "";
 
@@ -47,14 +47,31 @@ public class ParseApplications {
                 String tagName = xpp.getName();
                 switch (eventType){
                     case XmlPullParser.START_TAG:
-                        Log.d(TAG, "Starting tag: " + tagName);
+//                        Log.d(TAG, "Starting tag: " + tagName);
                         if ( tagName.equalsIgnoreCase("entry")){
                             inEntry = true;
-                            currentRecord = new Applicaton();
+                            currentRecord = new Application();
                         }
                         break;
+
+                    case XmlPullParser.TEXT:
+                        textValue = xpp.getText();
+                        break;
+
                     case XmlPullParser.END_TAG:
-                        Log.d(TAG, "Ending tag: " + tagName);
+//                        Log.d(TAG, "Ending tag: " + tagName);
+                        if(inEntry){
+                            if(tagName.equalsIgnoreCase("entry")){
+                                applications.add(currentRecord);
+                                inEntry = false;
+                            }else if(tagName.equalsIgnoreCase("name")){
+                                currentRecord.setName(textValue);
+                            }else if(tagName.equalsIgnoreCase("artist")){
+                                currentRecord.setArtist(textValue);
+                            }else if(tagName.equalsIgnoreCase("releaseDate")){
+                                currentRecord.setReleaseDate(textValue);
+                            }
+                        }
                         break;
                     default:
                         // nothing else to do
@@ -65,6 +82,13 @@ public class ParseApplications {
         } catch (Exception e) {
             status = false;
             e.printStackTrace();
+        }
+
+        for (Application app : applications){
+            Log.d(TAG, "*****************");
+            Log.d(TAG, "Name: " + app.getName());
+            Log.d(TAG, "Artist: " + app.getArtist());
+            Log.d(TAG, "Release Date: " + app.getReleaseDate());
         }
         return true;
     }
